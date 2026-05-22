@@ -1,0 +1,48 @@
+[project]
+name = "dockercomposefile"
+version = "0.1.0"
+description = "Pydantic models for Docker Compose files with YAML builder and exporter"
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.13"
+dependencies = [
+    "pydantic>=2.0",
+    "PyYAML>=6.0",
+]
+
+# Classifier list: https://pypi.org/classifiers/
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Pydantic :: 2",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: File Formats",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Homepage = "https://github.com/thewiw/py-docker-compose-file"
+Documentation = "https://github.com/thewiw/py-docker-compose-file/blob/master/README.md"
+Repository = "https://github.com/thewiw/py-docker-compose-file.git"
+Issues = "https://github.com/thewiw/py-docker-compose-file/issues"
+#Changelog = "https://github.com/thewiw/py-docker-compose-file/blob/master/CHANGELOG.md"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov",
+    "black",
+    "ruff",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=7.1.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
