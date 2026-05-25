@@ -6,6 +6,9 @@ from dockercomposefile import ComposeBuilder
 from dockercomposefile.models import (
     DockerComposeFile,
     PortConfig,
+    ServiceConfig,
+    ServiceNetworkConfig,
+    ServiceSecret,
     VolumeMount,
 )
 
@@ -445,3 +448,61 @@ class TestFromDict:
         }
         compose = ComposeBuilder.from_dict(data)
         assert compose.services["web"].image == "nginx"
+
+
+class TestPreInstantiatedModels:
+    """Tests for passing pre-instantiated model instances to Service."""
+
+    def test_volumes_with_pre_instantiated_volume_mount(self):
+        from dockercomposefile.models.service import Service
+        vol1 = VolumeMount(source="foo", target="bar")
+        vol2 = VolumeMount(source="truc", target="muche")
+        service = Service(
+            image="caddy:latest",
+            volumes=[vol1, vol2],
+        )
+        assert len(service.volumes) == 2
+        assert service.volumes[0] == vol1
+        assert service.volumes[1] == vol2
+
+    def test_ports_with_pre_instantiated_port_config(self):
+        port1 = PortConfig(target=80, published="80")
+        port2 = PortConfig(target=443, published="443")
+        from dockercomposefile.models.service import Service
+        service = Service(
+            image="nginx",
+            ports=[port1, port2],
+        )
+        assert len(service.ports) == 2
+        assert service.ports[0] == port1
+        assert service.ports[1] == port2
+
+    def test_configs_with_pre_instantiated_service_config(self):
+        cfg = ServiceConfig(source="app_config", target="/app/config.yml")
+        from dockercomposefile.models.service import Service
+        service = Service(
+            image="api",
+            configs=[cfg],
+        )
+        assert len(service.configs) == 1
+        assert service.configs[0] == cfg
+
+    def test_secrets_with_pre_instantiated_service_secret(self):
+        sec = ServiceSecret(source="db_password")
+        from dockercomposefile.models.service import Service
+        service = Service(
+            image="api",
+            secrets=[sec],
+        )
+        assert len(service.secrets) == 1
+        assert service.secrets[0] == sec
+
+    def test_networks_with_pre_instantiated_service_network_config(self):
+        net = ServiceNetworkConfig(aliases=["api-service"])
+        from dockercomposefile.models.service import Service
+        service = Service(
+            image="api",
+            networks={"backend": net},
+        )
+        assert "backend" in service.networks
+        assert service.networks["backend"] == net

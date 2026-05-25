@@ -380,6 +380,8 @@ class Service(ComposeBaseModel):
                     result.append(PortConfig.model_validate(item))
                 elif isinstance(item, int):
                     result.append(PortConfig.model_validate({"target": item}))
+                elif isinstance(item, PortConfig):
+                    result.append(item)
             return result
         return None
 
@@ -411,6 +413,8 @@ class Service(ComposeBaseModel):
                     result.append(VolumeMount.model_validate(_parse_service_volume(item)))
                 elif isinstance(item, dict):
                     result.append(VolumeMount.model_validate(item))
+                elif isinstance(item, VolumeMount):
+                    result.append(item)
             return result
         return None
 
@@ -511,6 +515,8 @@ class Service(ComposeBaseModel):
                     result.append(item)
                 elif isinstance(item, dict):
                     result.append(ServiceConfig.model_validate(item))
+                elif isinstance(item, ServiceConfig):
+                    result.append(item)
             return result
         return None
 
@@ -527,6 +533,8 @@ class Service(ComposeBaseModel):
                     result.append(item)
                 elif isinstance(item, dict):
                     result.append(ServiceSecret.model_validate(item))
+                elif isinstance(item, ServiceSecret):
+                    result.append(item)
             return result
         return None
 
@@ -566,6 +574,8 @@ class Service(ComposeBaseModel):
                     result[str(k)] = ServiceNetworkConfig()
                 elif isinstance(val, dict):
                     result[str(k)] = ServiceNetworkConfig.model_validate(val)
+                elif isinstance(val, ServiceNetworkConfig):
+                    result[str(k)] = val
             return result
         return None
 
